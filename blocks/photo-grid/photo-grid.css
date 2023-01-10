@@ -1,0 +1,11 @@
+.photo-grid {
+    width: fit-content;
+    margin: 0 auto;
+    margin-bottom: 48px;
+}  
+
+@media (min-width: 1024px) {
+    .photo-grid {
+      margin-bottom: 67px;
+    }
+  }

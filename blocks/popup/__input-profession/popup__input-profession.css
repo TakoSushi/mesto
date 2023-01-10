@@ -1,0 +1,24 @@
+.popup__input-profession {
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+  border: 0 solid white;
+  border-bottom-width: 1px;
+  border-bottom-color: rgba(0, 0, 0, 0.2);
+  padding: 0;
+  padding-bottom: 13px;
+  margin-bottom: 45px;
+}
+
+.popup__input-profession::placeholder {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: black;
+}
+
+@media (min-width: 640px) {
+  .popup__input-profession {
+    margin-bottom: 48px;
+  }
+}

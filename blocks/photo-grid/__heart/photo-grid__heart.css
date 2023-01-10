@@ -1,0 +1,14 @@
+.photo-grid__heart {
+  width: 22px;
+  height: 19px;
+  display: block;
+  background-color: rgba(0, 0, 0, 0);
+  background-image: url(../../../images/heart_disable.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: opacity .2s linear;
+}
+
+.photo-grid__heart:hover {
+  opacity: 0.5;
+}

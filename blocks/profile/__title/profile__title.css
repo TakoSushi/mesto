@@ -1,0 +1,13 @@
+.profile__title {
+  display: flex;
+  flex-direction: row;
+  align-items:baseline;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+@media (min-width: 1024px) {
+  .profile__title {
+    gap: 18px;
+  }
+}
