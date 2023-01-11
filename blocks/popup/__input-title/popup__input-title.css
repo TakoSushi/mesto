@@ -1,18 +1,23 @@
 .popup__input-title {
   width: 100%;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
   display: block;
   box-sizing: border-box;
   border: 0 solid white;
   border-bottom-width: 1px;
-  border-bottom-color: rgba(0, 0, 0, 0.2);
-  padding: 0;
+  border-bottom-color: rgba(0, 0, 0, .2);
   padding-bottom: 13px;
   margin-bottom: 30px;
+  text-overflow: ellipsis;
 }
 
 .popup__input-title::placeholder {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 17px;
   color: black;
+  transition: opacity .3s ease;
+}
+
+.popup__input-title:focus::placeholder {
+  opacity: 0;
 }
