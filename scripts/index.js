@@ -1,11 +1,11 @@
 let popup = document.querySelector('.popup'),
     editButton = document.querySelector('.profile__edit-button'),
     popupClose = document.querySelector('.popup__close'),
-    inputTitle = document.querySelector('.popup__input-title'),
-    inputProfession = document.querySelector('.popup__input-profession'),
+    // inputTitle = document.querySelector('.popup__input-title'),
+    // inputProfession = document.querySelector('.popup__input-profession'),
     profileName = document.querySelector('.profile__name'),
     profileProfession = document.querySelector('.profile__profession'),
-    popupForm = document.querySelector('.popup__container');
+    popupForm = document.querySelector('.popup__form');
 
 editButton.addEventListener('click', function() {
   popup.classList.add('popup_opened');
