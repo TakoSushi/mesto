@@ -3,16 +3,13 @@
   height: 18px;
   box-sizing: border-box;
   border: 1px solid white;
-  background-color: rgba(0, 0, 0, 0);
-  background-image: url(../../../images/img-pen_white.svg);
-  background-size: 7.5px;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: center / 7.5px no-repeat rgba(0, 0, 0, 0) url(../../../images/img-pen_white.svg);
   padding: 0;
   transition: opacity .2s linear;
 }
 
 .profile__edit-button:hover {
+  cursor: pointer;
   opacity: .6;
 }
 

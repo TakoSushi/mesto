@@ -4,17 +4,14 @@
   box-sizing: border-box;
   border: 2px solid #FFFFFF;
   border-radius: 2px;
-  background-color: rgba(0, 0, 0, 0);
-  background-image: url(../../../images/plus-icon_white.svg);
-  background-size: 16px;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: center / 16px no-repeat rgba(0, 0, 0, 0) url(../../../images/plus-icon_white.svg);
   padding: 0;
   margin: 0 auto;
   transition: opacity .2s linear;
 }
 
 .profile__add-button:hover {
+  cursor: pointer;
   opacity: .6;
 }
 

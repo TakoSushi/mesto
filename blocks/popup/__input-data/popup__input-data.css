@@ -10,8 +10,11 @@
   border-bottom-color: rgba(0, 0, 0, .2);
   padding-bottom: 13px;
   margin-bottom: 30px;
-  /* margin-bottom: 45px; Для нижнего поля*/
   text-overflow: ellipsis;
+}
+
+.popup__input-data:last-of-type {
+  margin-bottom: 45px;
 }
 
 .popup__input-data::placeholder {
@@ -23,8 +26,8 @@
   opacity: 0;
 }
 
-/* @media (min-width: 640px) {
-  .popup__input-profession {
+@media (min-width: 640px) {
+  .popup__input-data:last-of-type {
     margin-bottom: 48px;
   }
-}     Для нижнего поля */
+}

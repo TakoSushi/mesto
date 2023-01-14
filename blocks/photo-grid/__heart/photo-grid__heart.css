@@ -2,10 +2,8 @@
   width: 22px;
   height: 19px;
   display: block;
-  background-color: rgba(0, 0, 0, 0);
-  background-image: url(../../../images/heart_disable.svg);
-  background-position: center;
-  background-repeat: no-repeat;
+  background: center no-repeat rgba(0, 0, 0, 0) url(../../../images/heart_disable.svg);
+  cursor: pointer;
   transition: opacity .2s linear;
 }
 
