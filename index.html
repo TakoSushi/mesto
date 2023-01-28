@@ -27,50 +27,7 @@
     </section>
 
     <section class="photo-grid" aria-label="Фотогалерея">
-      <ul class="photo-grid__list">
-        <li class="photo-grid__card">
-          <div style="background-image:url(./images/Balmoral_Castle_Ballater_UK.jfif);" class="photo-grid__img">Вид Шотландских гор</div>
-          <div class="photo-grid__title">
-            <h2 class="photo-grid__title-name">Шотландские горы</h2>
-            <button type="button" class="photo-grid__heart" aria-label="лайк"></button>
-          </div>
-        </li>
-        <li class="photo-grid__card">
-          <div style="background-image:url(./images/Kyoto_Japan.jfif);" class="photo-grid__img">Бамбуковый лес в Киото, Япония</div>
-          <div class="photo-grid__title">
-            <h2 class="photo-grid__title-name">Бамбуковый лес</h2>
-            <button type="button" class="photo-grid__heart" aria-label="лайк"></button>
-          </div>
-        </li>
-        <li class="photo-grid__card">
-          <div style="background-image: url(./images/One_Vanderbilt_New-York_US.jfif);" class="photo-grid__img">Небоскреб Уан-Вандербильт в Нью-Йорке, США</div>
-          <div class="photo-grid__title">
-            <h2 class="photo-grid__title-name">Небоскреб Уан-Вандербильт</h2>
-            <button type="button" class="photo-grid__heart" aria-label="лайк"></button>
-          </div>
-        </li>
-        <li class="photo-grid__card">
-          <div style="background-image:url(./images/San-Francisco.jfif);" class="photo-grid__img">Трамвай в Сан-Франциско, США</div>
-          <div class="photo-grid__title">
-            <h2 class="photo-grid__title-name">Сан-Франциско</h2>
-            <button type="button" class="photo-grid__heart" aria-label="лайк"></button>
-          </div>
-        </li>
-        <li class="photo-grid__card">
-          <div style="background-image:url(./images/Santorini_Greece.jfif);" class="photo-grid__img">Остров Санторини, Греция</div>
-          <div class="photo-grid__title">
-            <h2 class="photo-grid__title-name">Санторини</h2>
-            <button type="button" class="photo-grid__heart" aria-label="лайк"></button>
-          </div>
-        </li>
-        <li class="photo-grid__card">
-          <div style="background-image:url(./images/Tokyo_Tower.jfif);" class="photo-grid__img">Телевизионная башня Токио, Япония</div>
-          <div class="photo-grid__title">
-            <h2 class="photo-grid__title-name">Башня Токио</h2>
-            <button type="button" class="photo-grid__heart" aria-label="лайк"></button>
-          </div>
-        </li>
-      </ul>
+      <ul class="photo-grid__list"></ul>
     </section>
   </main>
 
@@ -78,7 +35,7 @@
     <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
   </footer>
 
-  <div class="popup">
+  <div class="popup popup_user-input">
     <div class="popup__container">
       <button type="button" class="popup__close"></button>
       <form name="user-data" method="POST" class="popup__form">
@@ -89,6 +46,38 @@
       </form>
     </div>
   </div>
+
+  <div class="popup popup_item-input">
+    <div class="popup__container">
+      <button type="button" class="popup__close"></button>
+      <form name="new-item" method="POST" class="popup__form">
+        <h2 class="popup__title">Новое место</h2>
+        <input type="text" name="img-name" placeholder="Название" class="popup__input-data" id="input_img-name">
+        <input type="text" name="img-url" placeholder="Ссылка на картинку" class="popup__input-data" id="input_img-url">
+        <button type="submit" class="popup__button-save">Создать</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="popup popup_img-large">
+    <figure class="popup__container popup_img-fit">
+      <button type="button" class="popup__close"></button>
+      <img class="popup__full-img" src="./images/Balmoral_Castle_Ballater_UK.jfif" alt="Башня Токио">
+      <figcaption class="popup__title-img">Телевизионная башня Токио, Япония</figcaption>
+    </figure>
+  </div>
+
+  <tamplate class="card-template">
+    <li class="photo-grid__card">
+      <div class="photo-grid__img">
+        <button type="button" class="photo-grid__trash-button" aria-label="delete card"></button>
+      </div>
+      <div class="photo-grid__title">
+        <h2 class="photo-grid__title-name"></h2>
+        <button type="button" class="photo-grid__heart" aria-label="лайк"></button>
+      </div>
+    </li>
+  </tamplate>
 
   <script src="./scripts/index.js"></script>
 </body>
