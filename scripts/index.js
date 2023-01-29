@@ -136,4 +136,11 @@ photoGrid.addEventListener('click', function (event) {
       });
     }
 
+    if (event.target.classList.contains('photo-grid__heart')) {
+      event.target.classList.toggle('photo-grid__heart_active');
+    }
+
+    if (event.target.classList.contains('photo-grid__trash-button')) {
+      event.target.parentElement.parentElement.remove();
+    }
 });

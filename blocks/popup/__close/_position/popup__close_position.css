@@ -1,0 +1,10 @@
+.popup__close_position {
+  position: relative;
+  left: 0;
+}
+
+@media (min-width: 640px){
+    .popup__close_position {
+      left: 40px;
+    }
+  }

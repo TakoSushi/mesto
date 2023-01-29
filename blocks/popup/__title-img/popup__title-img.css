@@ -3,8 +3,6 @@
   font-size: 12px;
   line-height: 15px;
   max-width: 75vw;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  margin: 0;
+  align-self: start;
+  margin-top: 10px;
 }
