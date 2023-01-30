@@ -29,14 +29,14 @@ const popups = document.querySelectorAll('.popup'),
       popupForms = document.querySelectorAll('.popup__form'),
       photoGrid = document.querySelector('.photo-grid__list');
 
-const inputTitle = document.querySelector('.popup__input_user-name'),
-      inputProfession = document.querySelector('.popup__input_user-profession'),
+const inputTitle = document.querySelector('.popup__input-data_user-name'),
+      inputProfession = document.querySelector('.popup__input-data_user-profession'),
       profileName = document.querySelector('.profile__name'),
       profileProfession = document.querySelector('.profile__profession'),
       editButton = document.querySelector('.profile__edit-button');
 
-const inputImageName = document.querySelector('.popup__input_img-name'),
-      inputImageUrl = document.querySelector('.popup__input_img-url'),
+const inputImageName = document.querySelector('.popup__input-data_img-name'),
+      inputImageUrl = document.querySelector('.popup__input-data_img-url'),
       addCardButton = document.querySelector('.profile__add-button');
 
 function renderCard (item) {
