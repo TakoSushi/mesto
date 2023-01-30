@@ -25,25 +25,22 @@ const initialCards = [
   }
 ];
 
-const popup = document.querySelectorAll('.popup'),
+const popups = document.querySelectorAll('.popup'),
       popupForms = document.querySelectorAll('.popup__form'),
       photoGrid = document.querySelector('.photo-grid__list');
 
-const inputTitle = document.querySelector('#input_user-name'),
-      inputProfession = document.querySelector('#input_user-profession'),
+const inputTitle = document.querySelector('.popup__input_user-name'),
+      inputProfession = document.querySelector('.popup__input_user-profession'),
       profileName = document.querySelector('.profile__name'),
       profileProfession = document.querySelector('.profile__profession'),
       editButton = document.querySelector('.profile__edit-button');
 
-const inputImageName = document.querySelector('#input_img-name'),
-      inputImageUrl = document.querySelector('#input_img-url'),
+const inputImageName = document.querySelector('.popup__input_img-name'),
+      inputImageUrl = document.querySelector('.popup__input_img-url'),
       addCardButton = document.querySelector('.profile__add-button');
-      
-
-const cardTemplate = document.querySelector('.card-template').querySelector('.photo-grid__card');
 
 function renderCard (item) {
-  const card = cardTemplate.cloneNode(true);
+  const card = document.querySelector('.card-template').content.cloneNode(true);
 
   card.querySelector('.photo-grid__img').style.backgroundImage = `url('${item.link}')`;
   card.querySelector('.photo-grid__title-name').textContent = item.name;
@@ -51,7 +48,7 @@ function renderCard (item) {
   return card;
 }
 
-document.querySelector('.photo-grid__list').append(...initialCards.map(renderCard));
+photoGrid.append(...initialCards.map(renderCard));
 
 function openPopup(target) {
   target.classList.add('popup_opened');
@@ -59,6 +56,12 @@ function openPopup(target) {
 
 function closePopup(target) {
   target.classList.remove('popup_opened');
+}
+
+function addCloseEventOnPopup(currentPopup) {
+  currentPopup.querySelector('.popup__close').addEventListener('click', function() {
+    closePopup(currentPopup);
+  });
 }
 
 editButton.addEventListener('click', function() {
@@ -69,9 +72,7 @@ editButton.addEventListener('click', function() {
 
   openPopup(currentPopup);
 
-  currentPopup.querySelector('.popup__close').addEventListener('click', function() {
-    closePopup(currentPopup);
-  });
+  addCloseEventOnPopup(currentPopup);
 });
 
 addCardButton.addEventListener('click', function() {
@@ -82,9 +83,7 @@ addCardButton.addEventListener('click', function() {
 
   openPopup(currentPopup);
 
-  currentPopup.querySelector('.popup__close').addEventListener('click', function() {
-    closePopup(currentPopup);
-  });
+  addCloseEventOnPopup(currentPopup);
 });
 
 function handleFormSubmit (event) {
@@ -99,7 +98,7 @@ function handleFormSubmit (event) {
     profileProfession.textContent = inputProfession.value;
   }
 
-  closePopup(popup[0]);
+  closePopup(popups[0]);
 }
 
 function addCardFormSubmit (event) {
@@ -109,38 +108,43 @@ function addCardFormSubmit (event) {
   card.name = inputImageName.value;
   card.link = inputImageUrl.value;
 
-  document.querySelector('.photo-grid__list').prepend(renderCard (card));
+  photoGrid.prepend(renderCard (card));
 
-  closePopup(popup[1]);
+  closePopup(popups[1]);
 }
 
 popupForms[0].addEventListener('submit', handleFormSubmit);
 
 popupForms[1].addEventListener('submit', addCardFormSubmit);
 
+function openZoomCard(event) {
+  const currentCard = event.target.closest('.photo-grid__card');
+  const urlImage = currentCard.querySelector('.photo-grid__img').style.backgroundImage.split('"')[1];
+  const nameImage = currentCard.querySelector('.photo-grid__title-name').textContent;
+  
+  document.querySelector('.popup__full-img').src = urlImage;
+  document.querySelector('.popup__full-img').alt = nameImage;
+  document.querySelector('.popup__title-full-img').textContent = nameImage;
+}
+
 photoGrid.addEventListener('click', function (event) {
+  const classList = event.target.classList;
 
-    if (event.target.classList.contains('photo-grid__img')) {
-      const currentPopup = document.querySelector('.popup_img-large');
-      const currentCard = event.target.closest('.photo-grid__card');
-      const urlImage = currentCard.querySelector('.photo-grid__img').style.backgroundImage.split('"')[1];
-      const nameImage = currentCard.querySelector('.photo-grid__title-name').textContent;
-      
-      currentPopup.querySelector('.popup__full-img').src = urlImage;
-      currentPopup.querySelector('.popup__title-img').textContent = nameImage;
-      
-      openPopup(currentPopup);
+  if (classList.contains('photo-grid__img')) {
+    const currentPopup = document.querySelector('.popup_img-large');
+    
+    openZoomCard(event);
 
-      currentPopup.querySelector('.popup__close').addEventListener('click', function() {
-      closePopup(currentPopup);
-      });
-    }
+    openPopup(currentPopup);
 
-    if (event.target.classList.contains('photo-grid__heart')) {
-      event.target.classList.toggle('photo-grid__heart_active');
-    }
+    addCloseEventOnPopup(currentPopup);
+  }
 
-    if (event.target.classList.contains('photo-grid__trash-button')) {
-      event.target.parentElement.parentElement.remove();
-    }
+  if (classList.contains('photo-grid__heart')) {
+    classList.toggle('photo-grid__heart_active');
+  }
+
+  if (classList.contains('photo-grid__trash-button')) {
+    event.target.parentElement.parentElement.remove();
+  }
 });

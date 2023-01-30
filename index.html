@@ -40,8 +40,8 @@
       <button type="button" class="popup__close"></button>
       <form name="user-data" method="POST" class="popup__form">
         <h2 class="popup__title">Редактировать профиль</h2>
-        <input type="text" name="user-name" placeholder="Имя" class="popup__input-data" id="input_user-name">
-        <input type="text" name="user-profession" placeholder="О себе" class="popup__input-data" id="input_user-profession">
+        <input type="text" name="user-name" placeholder="Имя" class="popup__input-data popup__input_user-name">
+        <input type="text" name="user-profession" placeholder="О себе" class="popup__input-data popup__input_user-profession">
         <button type="submit" class="popup__button-save">Сохранить</button>
       </form>
     </div>
@@ -52,8 +52,8 @@
       <button type="button" class="popup__close"></button>
       <form name="new-item" method="POST" class="popup__form">
         <h2 class="popup__title">Новое место</h2>
-        <input type="text" name="img-name" placeholder="Название" class="popup__input-data" id="input_img-name">
-        <input type="text" name="img-url" placeholder="Ссылка на картинку" class="popup__input-data" id="input_img-url">
+        <input type="text" name="img-name" placeholder="Название" class="popup__input-data popup__input_img-name">
+        <input type="text" name="img-url" placeholder="Ссылка на картинку" class="popup__input-data popup__input_img-url">
         <button type="submit" class="popup__button-save">Создать</button>
       </form>
     </div>
@@ -63,13 +63,13 @@
     <div class="popup__container popup__container_size">
       <button type="button" class="popup__close popup__close_position"></button>
       <figure class="popup__figure-img">
-        <img class="popup__full-img" src="./images/Balmoral_Castle_Ballater_UK.jfif" alt="Башня Токио">
-        <figcaption class="popup__title-img">Телевизионная башня Токио, Япония</figcaption>
+        <img class="popup__full-img" src="" alt="">
+        <figcaption class="popup__title-full-img"></figcaption>
       </figure>
     </div>
   </div>
 
-  <tamplate class="card-template">
+  <template class="card-template">
     <li class="photo-grid__card">
       <div class="photo-grid__img">
         <button type="button" class="photo-grid__trash-button" aria-label="delete card"></button>
@@ -79,7 +79,7 @@
         <button type="button" class="photo-grid__heart" aria-label="лайк"></button>
       </div>
     </li>
-  </tamplate>
+  </template>
 
   <script src="./scripts/index.js"></script>
 </body>
