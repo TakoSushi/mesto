@@ -25,83 +25,102 @@ const initialCards = [
   }
 ];
 
-const popups = document.querySelectorAll('.popup'),
-      popupForms = document.querySelectorAll('.popup__form'),
-      photoGrid = document.querySelector('.photo-grid__list');
+const popupProfile = document.querySelector('.popup_user-input'),
+      cardAddPopup = document.querySelector('.popup_item-input'),
+      largeImagePopup = document.querySelector('.popup_img-large'),
+      profileForm = document.forms['user-data'],
+      cardForm = document.forms['new-card'],
+      popupCloseButtons = document.querySelectorAll('.popup__close');
 
-const inputTitle = document.querySelector('.popup__input-data_user-name'),
-      inputProfession = document.querySelector('.popup__input-data_user-profession'),
+const inputProfileName = document.querySelector('.popup__input-data_user-name'),
+      inputProfileProfession = document.querySelector('.popup__input-data_user-profession'),
       profileName = document.querySelector('.profile__name'),
       profileProfession = document.querySelector('.profile__profession'),
-      editButton = document.querySelector('.profile__edit-button');
+      profileEditButton = document.querySelector('.profile__edit-button');
 
 const inputImageName = document.querySelector('.popup__input-data_img-name'),
       inputImageUrl = document.querySelector('.popup__input-data_img-url'),
       addCardButton = document.querySelector('.profile__add-button');
 
-function renderCard (item) {
-  const card = document.querySelector('.card-template').content.cloneNode(true);
+const cardTemplate = document.querySelector('.card-template'),
+      photoGrid = document.querySelector('.photo-grid__list'),
+      largeImage = document.querySelector('.popup__full-img'),
+      largeImageTitle = document.querySelector('.popup__title-full-img');
 
-  card.querySelector('.photo-grid__img').style.backgroundImage = `url('${item.link}')`;
-  card.querySelector('.photo-grid__title-name').textContent = item.name;
-  
+function openPopup(popup) {
+  popup.classList.add('popup_opened');
+}
+
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
+}
+
+function renderLargeImage(event) {
+  const currentCard = event.target.closest('.photo-grid__card'),
+        urlImage = currentCard.querySelector('.photo-grid__img').style.backgroundImage.split('"')[1],
+        nameImage = currentCard.querySelector('.photo-grid__title-name').textContent;
+
+  largeImage.src = urlImage;
+  largeImage.alt = nameImage;
+  largeImageTitle.textContent = nameImage;
+}
+
+function renderCard (item) {
+  const card = cardTemplate.content.cloneNode(true),
+        cardImage = card.querySelector('.photo-grid__img'),
+        cardTitleName = card.querySelector('.photo-grid__title-name'),
+        cardTrashButton = card.querySelector('.photo-grid__trash-button'),
+        cardLikeButton = card.querySelector('.photo-grid__heart');
+
+  cardImage.style.backgroundImage = `url('${item.link}')`;
+  cardTitleName.textContent = item.name;
+
+  cardImage.addEventListener('click', function (event) {
+    renderLargeImage(event);
+    openPopup(largeImagePopup);
+  });
+
+  cardLikeButton.addEventListener('click', function (event) {
+    event.target.classList.toggle('photo-grid__heart_active');
+  });
+
+  cardTrashButton.addEventListener('click', function (event) {
+    event.stopPropagation();
+    event.target.closest('.photo-grid__card').remove();
+  });
+
   return card;
 }
 
 photoGrid.append(...initialCards.map(renderCard));
 
-function openPopup(target) {
-  target.classList.add('popup_opened');
-}
+popupCloseButtons.forEach((button) => {
+  const popup = button.closest('.popup');
 
-function closePopup(target) {
-  target.classList.remove('popup_opened');
-}
+  button.addEventListener('click', () => closePopup(popup));
+});
 
-function addCloseEventOnPopup(currentPopup) {
-  currentPopup.querySelector('.popup__close').addEventListener('click', function() {
-    closePopup(currentPopup);
-  });
-}
+profileEditButton.addEventListener('click', function() {
+  inputProfileName.value = profileName.textContent;
+  inputProfileProfession.value = profileProfession.textContent;
 
-editButton.addEventListener('click', function() {
-  const currentPopup = document.querySelector('.popup_user-input');
-
-  inputTitle.value = profileName.textContent;
-  inputProfession.value = profileProfession.textContent;
-
-  openPopup(currentPopup);
-
-  addCloseEventOnPopup(currentPopup);
+  openPopup(popupProfile);
 });
 
 addCardButton.addEventListener('click', function() {
-  const currentPopup = document.querySelector('.popup_item-input');
-
-  inputImageName.value = '';
-  inputImageUrl.value = '';
-
-  openPopup(currentPopup);
-
-  addCloseEventOnPopup(currentPopup);
+  openPopup(cardAddPopup);
 });
 
-function handleFormSubmit (event) {
+function handleProfileFormSubmit (event) {
   event.preventDefault();
 
-  if (inputTitle.value && inputProfession.value) {
-    profileName.textContent = inputTitle.value;
-    profileProfession.textContent = inputProfession.value;
-  } else if (inputTitle.value){
-    profileName.textContent = inputTitle.value;
-  } else if (inputProfession.value){
-    profileProfession.textContent = inputProfession.value;
-  }
+  profileName.textContent = inputProfileName.value;
+  profileProfession.textContent = inputProfileProfession.value;
 
-  closePopup(popups[0]);
+  closePopup(popupProfile);
 }
 
-function addCardFormSubmit (event) {
+function handleCardFormSubmit (event) {
   event.preventDefault();
 
   const card = {};
@@ -110,41 +129,10 @@ function addCardFormSubmit (event) {
 
   photoGrid.prepend(renderCard (card));
 
-  closePopup(popups[1]);
+  event.target.reset()
+
+  closePopup(cardAddPopup);
 }
 
-popupForms[0].addEventListener('submit', handleFormSubmit);
-
-popupForms[1].addEventListener('submit', addCardFormSubmit);
-
-function openZoomCard(event) {
-  const currentCard = event.target.closest('.photo-grid__card');
-  const urlImage = currentCard.querySelector('.photo-grid__img').style.backgroundImage.split('"')[1];
-  const nameImage = currentCard.querySelector('.photo-grid__title-name').textContent;
-  
-  document.querySelector('.popup__full-img').src = urlImage;
-  document.querySelector('.popup__full-img').alt = nameImage;
-  document.querySelector('.popup__title-full-img').textContent = nameImage;
-}
-
-photoGrid.addEventListener('click', function (event) {
-  const classList = event.target.classList;
-
-  if (classList.contains('photo-grid__img')) {
-    const currentPopup = document.querySelector('.popup_img-large');
-    
-    openZoomCard(event);
-
-    openPopup(currentPopup);
-
-    addCloseEventOnPopup(currentPopup);
-  }
-
-  if (classList.contains('photo-grid__heart')) {
-    classList.toggle('photo-grid__heart_active');
-  }
-
-  if (classList.contains('photo-grid__trash-button')) {
-    event.target.parentElement.parentElement.remove();
-  }
-});
+profileForm.addEventListener('submit', handleProfileFormSubmit);
+cardForm.addEventListener('submit', handleCardFormSubmit);
