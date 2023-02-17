@@ -9,12 +9,8 @@
   border-bottom-width: 1px;
   border-bottom-color: rgba(0, 0, 0, .2);
   padding-bottom: 13px;
-  margin-bottom: 30px;
+  margin-bottom: 5px;
   text-overflow: ellipsis;
-}
-
-.popup__input-data:last-of-type {
-  margin-bottom: 45px;
 }
 
 .popup__input-data::placeholder {
@@ -24,10 +20,4 @@
 
 .popup__input-data:focus::placeholder {
   opacity: 0;
-}
-
-@media (min-width: 640px) {
-  .popup__input-data:last-of-type {
-    margin-bottom: 48px;
-  }
 }

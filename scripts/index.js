@@ -1,3 +1,5 @@
+// import enableValidation from './validate.js'; 
+
 const initialCards = [
   {
     name: 'Шотландские горы',
@@ -25,7 +27,8 @@ const initialCards = [
   }
 ];
 
-const popupProfile = document.querySelector('.popup_user-input'),
+const popupsList = document.querySelectorAll('.popup'),
+      popupProfile = document.querySelector('.popup_user-input'),
       cardAddPopup = document.querySelector('.popup_item-input'),
       largeImagePopup = document.querySelector('.popup_img-large'),
       profileForm = document.forms['user-data'],
@@ -98,7 +101,26 @@ popupCloseButtons.forEach((button) => {
   const popup = button.closest('.popup');
 
   button.addEventListener('click', () => closePopup(popup));
+
+  popup.addEventListener('click', (event) => {
+    if (event.target === event.currentTarget) closePopup(popup);
+  });
+
 });
+
+document.addEventListener('keydown', (event) => {
+  
+  if(event.code === 'Escape') {
+    popupsList.forEach(popup => {
+      if (popup.classList.contains('popup_opened')){
+        closePopup(popup);
+      }
+    });
+  }
+});
+
+inputProfileName.value = profileName.textContent;
+inputProfileProfession.value = profileProfession.textContent;
 
 profileEditButton.addEventListener('click', function() {
   inputProfileName.value = profileName.textContent;
@@ -129,10 +151,19 @@ function handleCardFormSubmit (event) {
 
   photoGrid.prepend(renderCard (card));
 
-  event.target.reset()
+  event.target.reset();
 
   closePopup(cardAddPopup);
 }
 
 profileForm.addEventListener('submit', handleProfileFormSubmit);
 cardForm.addEventListener('submit', handleCardFormSubmit);
+
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input-data',
+  submitButtonSelector: '.popup__button-save',
+  inactiveButtonClass: 'popup__button-save_disabled',
+  inputErrorClass: 'popup__input-data_error',
+  errorClass: 'popup__error-message_visible',
+}); 

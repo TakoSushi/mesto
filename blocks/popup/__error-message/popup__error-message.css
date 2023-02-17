@@ -1,0 +1,23 @@
+.popup__error-message {
+  display: block;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  color: #f00;
+  margin-bottom: 13px;
+  opacity: 0;
+  visibility: hidden;
+  transition: visibility 0s linear .3s, opacity .3s linear;
+}
+
+.popup__error-message:last-of-type {
+    margin-bottom: 31px;
+  }
+
+  @media (min-width: 640px) {
+    .popup__error-message:last-of-type {
+      margin-bottom: 34px;
+    }
+  }
