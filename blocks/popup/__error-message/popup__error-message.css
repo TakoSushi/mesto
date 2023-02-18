@@ -1,5 +1,6 @@
 .popup__error-message {
   display: block;
+  min-height: 30px;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
@@ -13,11 +14,5 @@
 }
 
 .popup__error-message:last-of-type {
-    margin-bottom: 31px;
-  }
-
-  @media (min-width: 640px) {
-    .popup__error-message:last-of-type {
-      margin-bottom: 34px;
-    }
+    margin-bottom: 20px;
   }
