@@ -24,3 +24,5 @@ const initialCards = [
     link: './images/Tokyo_Tower.jfif'
   }
 ];
+
+export default initialCards;
