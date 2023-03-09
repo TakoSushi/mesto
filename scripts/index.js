@@ -13,11 +13,11 @@ const inputProfileName = document.querySelector('.popup__input-data_user-name'),
       inputProfileProfession = document.querySelector('.popup__input-data_user-profession'),
       titleProfileName = document.querySelector('.profile__name'),
       titleProfileProfession = document.querySelector('.profile__profession'),
-      buttonOpenEditProfilePopup = document.querySelector('.profile__edit-button'),
+      buttonOpenEditProfilePopup = document.querySelector('.profile__edit-button');
 
 const inputImageName = document.querySelector('.popup__input-data_img-name'),
       inputImageUrl = document.querySelector('.popup__input-data_img-url'),
-      buttonOpenPopupCard = document.querySelector('.profile__add-button'),
+      buttonOpenPopupCard = document.querySelector('.profile__add-button');
 
 const photoGrid = document.querySelector('.photo-grid__list'),
       largeImage = document.querySelector('.popup__full-img'),
@@ -50,32 +50,38 @@ function openPopup(popup) {
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
   document.removeEventListener('keydown', closePopupKeydownEscape);
-  profileEditForm.clearInputElements();
-  newCardAddForm.clearInputElements();
+}
+
+function cleanInputsError(popup) {
+  if (popup.classList.contains('popup_user-input')){
+    profileEditForm.clearInputElements();
+  } else if(popup.classList.contains('popup_item-input')) {
+    newCardAddForm.clearInputElements();
+  }
 }
 
 function closePopupKeydownEscape (event) {
   if(event.code === 'Escape') {
     const openedPopup = document.querySelector('.popup_opened');
-    closePopup(openedPopup);  
+    closePopup(openedPopup);
+    cleanInputsError(openedPopup);
   }
 }
 
-function renderLargeImage({name, link}, cardTitleName) {
-    largeImage.src = link;
-    largeImage.alt = name;
-    titleLargeImage.textContent = cardTitleName.textContent;
+function renderLargeImage({name, link}) {
+  largeImage.src = link;
+  largeImage.alt = name;
+  titleLargeImage.textContent = name;
+  openPopup(popupShowLargeImage);
 }
 
 photoGrid.append(...initialCards.map((item) => {
   const card = new Card (
     item,
-    {
-    renderLargeImageHandler: renderLargeImage,
-    openPopupHandler: openPopup,
-    },
+    { renderLargeImageHandler: renderLargeImage },
     cardSelectors,
-    popupShowLargeImage);
+    popupShowLargeImage,
+  );
 
   return card.getCard();
 }));
@@ -83,13 +89,29 @@ photoGrid.append(...initialCards.map((item) => {
 buttonsClosePopups.forEach((button) => {
   const popup = button.closest('.popup');
 
-  button.addEventListener('click', () => closePopup(popup));
+  button.addEventListener('click', () => {
+    closePopup(popup);
+    cleanInputsError(popup);
+  });
 
   popup.addEventListener('mousedown', (event) => {
-    if (event.target === event.currentTarget) closePopup(popup);
+    if (event.target === event.currentTarget) {
+      closePopup(popup);
+      cleanInputsError(popup);
+    }
   });
 
 });
+    
+function addFocusHandler(...inputs) {
+  inputs.forEach((input) => {
+    input.addEventListener('focus', (event) => {
+      event.target.select();
+    });
+  });
+}
+
+addFocusHandler(inputProfileName, inputProfileProfession, inputImageName, inputImageUrl);
 
 buttonOpenEditProfilePopup.addEventListener('click', () => {
   inputProfileName.value = titleProfileName.textContent;
@@ -121,12 +143,9 @@ function handleCardFormSubmit (event) {
       name: inputImageName.value,
       link: inputImageUrl.value,
     },
-    {
-      renderLargeImageHandler: renderLargeImage,
-      openPopupHandler: openPopup,
-    },
-      cardSelectors,
-      popupShowLargeImage);
+    { renderLargeImageHandler: renderLargeImage },
+    cardSelectors,
+    popupShowLargeImage);
 
   photoGrid.prepend(card.getCard());
 
@@ -138,8 +157,8 @@ function handleCardFormSubmit (event) {
 formEditProfile.addEventListener('submit', handleformEditProfileSubmit);
 formAddNewCard.addEventListener('submit', handleCardFormSubmit);
 
-const profileEditForm = new FormValidator(config, '.popup_user-input')
+const profileEditForm = new FormValidator(config, popupProfile)
 profileEditForm.enableValidation();
 
-const newCardAddForm = new FormValidator (config, '.popup_item-input');
+const newCardAddForm = new FormValidator (config, popupAddNewCard);
 newCardAddForm.enableValidation();

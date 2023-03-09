@@ -1,47 +1,52 @@
 class Card {
-  constructor({name, link}, {renderLargeImageHandler, openPopupHandler}, cardSelectors, popupShowLargeImage) {
+  constructor({name, link}, {renderLargeImageHandler}, cardSelectors, popupShowLargeImage) {
     this.name = name;
     this.link = link;
     this._renderLargeImageHandler = renderLargeImageHandler;
-    this._openPopupHandler = openPopupHandler;
-    this._cardSelectors = cardSelectors;
     this._popupShowLargeImage = popupShowLargeImage;
+    this._cardLikeButtonActive = cardSelectors.cardLikeButtonActive;
+
+    this._template = document.querySelector(cardSelectors.cardTemplate).content;
+    this._card = this._template.querySelector(cardSelectors.photoGridCard).cloneNode(true);
+    this._cardImage = this._card.querySelector(cardSelectors.cardImage);
+    this._cardTitleName = this._card.querySelector(cardSelectors.cardTitleName);
+    this._cardTrashButton = this._card.querySelector(cardSelectors.cardTrashButton);
+    this._cardLikeButton = this._card.querySelector(cardSelectors.cardLikeButton);
+  
+    this._openLargeImage = this._openLargeImage.bind(this);
+    this._toogleLikeButton = this._toogleLikeButton.bind(this);
+    this._deleteCard = this._deleteCard.bind(this);
   }
 
   getCard() {
-    this._card = document
-      .querySelector(this._cardSelectors.cardTemplate)
-      .content
-      .cloneNode(true);
-      
-    const cardImage = this._card.querySelector(this._cardSelectors.cardImage),
-          cardTitleName = this._card.querySelector(this._cardSelectors.cardTitleName),
-          cardTrashButton = this._card.querySelector(this._cardSelectors.cardTrashButton),
-          cardLikeButton = this._card.querySelector(this._cardSelectors.cardLikeButton);
+    this._cardImage.style.backgroundImage = `url('${this.link}')`;
+    this._cardTitleName.textContent = this.name;
 
-    cardImage.style.backgroundImage = `url('${this.link}')`;
-    cardTitleName.textContent = this.name;
-
-    this._setEventListeners(cardImage, cardTitleName, cardLikeButton, cardTrashButton);
-      
+    this._setEventListeners();
     return this._card;
   }
+  
+  _openLargeImage() {
+    this._renderLargeImageHandler({name: this.name, link: this.link});
+  }
 
-  _setEventListeners(cardImage, cardTitleName, cardLikeButton, cardTrashButton) {
+  _toogleLikeButton() {
+    this._cardLikeButton.classList.toggle(this._cardLikeButtonActive);
+  }
 
-    cardImage.addEventListener('click', () => {
-      this._renderLargeImageHandler({name: this.name, link: this.link}, cardTitleName);
-      this._openPopupHandler(this._popupShowLargeImage);
-    });
+  _deleteCard(event) {
+    event.stopPropagation();
+    this._card.remove();
+    this._template = null;
+  }
 
-    cardLikeButton.addEventListener('click', (event) => {
-      event.target.classList.toggle(this._cardSelectors.cardLikeButtonActive);
-    });
+  _setEventListeners() {
 
-    cardTrashButton.addEventListener('click', (event) => {
-      event.stopPropagation();
-      event.target.closest(this._cardSelectors.photoGridCard).remove();        
-    });
+    this._cardImage.addEventListener('click', this._openLargeImage);
+
+    this._cardLikeButton.addEventListener('click', this._toogleLikeButton);
+
+    this._cardTrashButton.addEventListener('click', this._deleteCard)
   }
 }
 

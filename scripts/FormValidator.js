@@ -1,11 +1,11 @@
 class FormValidator {
-  constructor(config, currentFormSelector){
+  constructor(config, currentForm){
     this._inputSelector = config.inputSelector;
     this._inactiveButtonClass = config.inactiveButtonClass;
     this._inputErrorClass = config.inputErrorClass;
     this._errorClass = config.errorClass;
     this._errorMessageSelector = config.errorMessageSelector; 
-    this._currentForm = document.querySelector(currentFormSelector);
+    this._currentForm = currentForm;
     this._formInputs = Array.from(this._currentForm.querySelectorAll(this._inputSelector));
     this._buttonElement = this._currentForm.querySelector(config.submitButtonSelector);
   }
@@ -42,10 +42,6 @@ class FormValidator {
     this._buttonElement.setAttribute('disabled', 'disabled');
   }
 
-  _focusHandler({target}) {
-    target.select();
-  }
-
   clearInputElements() {
     this._formInputs.forEach((inputElement) => {
       const errorField = this._currentForm.querySelector(`${this._inputSelector}_${inputElement.name} + ${this._errorMessageSelector}`);
@@ -75,8 +71,6 @@ class FormValidator {
   
         this._toogleButtonSelector();
       });
-  
-      inputElement.addEventListener('focus', this._focusHandler);
     });
   }
 
