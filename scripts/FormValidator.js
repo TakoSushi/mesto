@@ -64,11 +64,8 @@ class FormValidator {
 
       const errorField = this._currentForm.querySelector(`${this._inputSelector}_${inputElement.name} + ${this._errorMessageSelector}`);
   
-      inputElement.addEventListener('input', (e) => {
-        const inputField = e.target;
-  
-        this._isValid(inputField, errorField);
-  
+      inputElement.addEventListener('input', () => {  
+        this._isValid(inputElement, errorField);
         this._toogleButtonSelector();
       });
     });
