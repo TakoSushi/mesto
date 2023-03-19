@@ -1,8 +1,8 @@
 class Card {
-  constructor({name, link}, {renderLargeImageHandler}, cardSelectors, popupShowLargeImage) {
+  constructor({name, link}, {renderPopupWithImage}, cardSelectors, popupShowLargeImage) {
     this.name = name;
     this.link = link;
-    this._renderLargeImageHandler = renderLargeImageHandler;
+    this._renderPopupWithImage = renderPopupWithImage;
     this._popupShowLargeImage = popupShowLargeImage;
     this._cardLikeButtonActive = cardSelectors.cardLikeButtonActive;
 
@@ -27,7 +27,7 @@ class Card {
   }
   
   _openLargeImage() {
-    this._renderLargeImageHandler({name: this.name, link: this.link});
+    this._renderPopupWithImage({name: this.name, link: this.link});
   }
 
   _toogleLikeButton() {
