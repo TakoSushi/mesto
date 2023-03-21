@@ -17,6 +17,11 @@ export default class PopupWithForm extends Popup {
     return {firstInputValue, secondInputValue}
   }
 
+  setInputValues(firstInputValue, secondInputValue) {
+    this._firstInput.value = firstInputValue;
+    this._secondInput.value = secondInputValue;
+  }
+
   setEventListeners({closeBtnSelector}) {
     super.setEventListeners(closeBtnSelector);
 
