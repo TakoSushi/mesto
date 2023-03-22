@@ -52,8 +52,8 @@ const popupWithCardAdd = new PopupWithForm (
         { renderPopupWithImage: handleCardClick },
         cardSelectors,
         popupShowLargeImage);
-    
-      photoGrid.prepend(card.getCard());
+      
+        photoGridRender.addItem(card.getCard(), false);
     },
     currentFormName: 'new-card',
     firstInput: '.popup__input-data_img-name',
@@ -82,7 +82,7 @@ const photoGridRender = new Section({
 
     const cardElement = card.getCard();
 
-    photoGridRender.addItem(cardElement);
+    photoGridRender.addItem(cardElement, true);
   },
 }, '.photo-grid__list');
 
