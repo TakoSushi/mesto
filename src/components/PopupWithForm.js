@@ -1,25 +1,27 @@
 import Popup from './Popup.js';
 
 export default class PopupWithForm extends Popup {
-  constructor(selector, {handleFormSubmit, currentFormName, firstInput, secondInput}) {
+  constructor(selector, {handleFormSubmit, currentFormName, inputsSelector}) {
     super(selector);
     this._handleFormSubmit = handleFormSubmit;
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
 
     this._form = document.forms[currentFormName];
-    this._firstInput = this._form.querySelector(firstInput);
-    this._secondInput = this._form.querySelector(secondInput);
+    this._inputList = this._form.querySelectorAll(inputsSelector);
   }
 
   _getInputValues() {
-    const firstInputValue = this._firstInput.value;
-    const secondInputValue = this._secondInput.value;
-    return {firstInputValue, secondInputValue}
+    this._formValues = {};
+    this._inputList.forEach( (input) => {
+      this._formValues[input.name] = input.value;
+    });
+    return this._formValues;
   }
 
-  setInputValues(firstInputValue, secondInputValue) {
-    this._firstInput.value = firstInputValue;
-    this._secondInput.value = secondInputValue;
+  setInputValues(userData) {
+    this._inputList.forEach((input) => {
+      input.value = userData[input.name];
+    });
   }
 
   setEventListeners({closeBtnSelector}) {

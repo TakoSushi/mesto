@@ -5,13 +5,16 @@ export default class UserInfo {
   }
 
   getUserInfo() {
-    const nameValue = this._userName.textContent;
-    const professionValue = this._userProfession.textContent;
-    return {nameValue, professionValue};
+    const userData = {
+      'user-name': this._userName.textContent,
+      'user-profession': this._userProfession.textContent
+    };
+    
+    return userData;
   }
 
-  setUserInfo(newUserName, newUserProfession) {
-    this._userName.textContent = newUserName;
-    this._userProfession.textContent = newUserProfession;
+  setUserInfo(newUserData) {
+    this._userName.textContent = newUserData['user-name'];
+    this._userProfession.textContent = newUserData['user-profession'];
   }
 }

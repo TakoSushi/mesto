@@ -1,12 +1,11 @@
 import './index.css';
-import initialCards from '../components/initialCard.js';
 import Card from '../components/Card.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import FormValidator from '../components/FormValidator.js';
-import {
+import {initialCards,
   popupProfile,
   inputProfileName,
   inputProfileProfession,
@@ -16,7 +15,6 @@ import {
   inputImageUrl,
   buttonOpenPopupCard,
   popupShowLargeImage,
-  photoGrid,
   userInfoSelectors,
   popupWithImageSelectors,
   cardSelectors,
@@ -30,34 +28,41 @@ const popupWithProfile = new PopupWithForm (
   '.popup_user-input',
   { 
     handleFormSubmit: (newUserData) => {
-    userInfo.setUserInfo(newUserData.firstInputValue, newUserData.secondInputValue)
+    userInfo.setUserInfo(newUserData)
     },
     currentFormName: 'user-data',
-    firstInput: '.popup__input-data_user-name',
-    secondInput: '.popup__input-data_user-profession',
+    inputsSelector: '.popup__input-data'
   }
 );
 
 popupWithProfile.setEventListeners({closeBtnSelector: '.popup__close'});
 
+function createCard(item) {
+  const card = new Card(
+    item,
+    { renderPopupWithImage: handleCardClick },
+    cardSelectors,
+    popupShowLargeImage,
+  );
+
+  const cardElement = card.getCard();
+  return cardElement;
+}
+
 const popupWithCardAdd = new PopupWithForm (
   '.popup_item-input',
   {
-    handleFormSubmit: (newCardData) => {
-      const card = new Card (
-        {
-          name: newCardData.firstInputValue,
-          link: newCardData.secondInputValue,
-        },
-        { renderPopupWithImage: handleCardClick },
-        cardSelectors,
-        popupShowLargeImage);
-      
-        photoGridRender.addItem(card.getCard(), false);
+    handleFormSubmit: (newUserData) => {
+      const item = {
+        name: newUserData[inputImageName.name],
+        link: newUserData[inputImageUrl.name]
+      }
+      const newCard = createCard(item);
+
+      photoGridRender.addItem(newCard, false);
     },
     currentFormName: 'new-card',
-    firstInput: '.popup__input-data_img-name',
-    secondInput: '.popup__input-data_img-url',
+    inputsSelector: '.popup__input-data'
   }
 );
 
@@ -73,16 +78,9 @@ function handleCardClick({name, link}) {
 const photoGridRender = new Section({
   items: initialCards,
   renderer: (item) => {
-    const card = new Card (
-      item,
-      { renderPopupWithImage: handleCardClick },
-      cardSelectors,
-      popupShowLargeImage,
-    );
+    const newCard = createCard(item);
 
-    const cardElement = card.getCard();
-
-    photoGridRender.addItem(cardElement, true);
+    photoGridRender.addItem(newCard, true);
   },
 }, '.photo-grid__list');
 
@@ -100,7 +98,7 @@ addFocusHandler(inputProfileName, inputProfileProfession, inputImageName, inputI
 
 buttonOpenEditProfilePopup.addEventListener('click', () => {
   const userData = userInfo.getUserInfo();
-  popupWithProfile.setInputValues(userData.nameValue, userData.professionValue);
+  popupWithProfile.setInputValues(userData);
   popupWithProfileValidate.clearInputElements();
   popupWithProfileValidate.setButtonSubmitDisabled();
 
