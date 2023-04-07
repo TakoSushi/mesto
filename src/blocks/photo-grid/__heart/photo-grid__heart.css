@@ -3,6 +3,7 @@
   height: 19px;
   display: block;
   border: none;
+  margin-bottom: 3px;
   background: center no-repeat rgba(0, 0, 0, 0) url(../../../images/heart_disable.svg);
   cursor: pointer;
   transition: opacity .2s linear;

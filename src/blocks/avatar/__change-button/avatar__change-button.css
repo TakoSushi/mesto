@@ -1,0 +1,17 @@
+.avatar__change-button{
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: center / 26px no-repeat rgba(0, 0, 0, 0.8) url(../../../images/img-pen_white.svg);
+  border: 0;
+  opacity: 0;
+  transition: opacity .3s linear;
+}
+
+.avatar__change-button:hover{
+  cursor: pointer;
+  opacity: 1;
+  transition-delay: 0s;
+}

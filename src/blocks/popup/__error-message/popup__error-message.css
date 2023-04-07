@@ -12,7 +12,3 @@
   visibility: hidden;
   transition: visibility 0s linear .3s, opacity .3s linear;
 }
-
-.popup__error-message:last-of-type {
-    margin-bottom: 20px;
-  }
