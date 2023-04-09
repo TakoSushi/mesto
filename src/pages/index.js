@@ -4,6 +4,7 @@ import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import PopupWithImage from '../components/PopupWithImage.js';
+import PopupWithConfirm from '../components/PopupWithConfirm';
 import FormValidator from '../components/FormValidator.js';
 import Api from '../components/Api.js';
 import {
@@ -16,7 +17,6 @@ import {
   inputImageUrl,
   buttonOpenPopupCard,
   popupUpdateAvatar,
-  inputAvatarUrl,
   buttonOpenUpdateAvatar,
   popupShowLargeImage,
   userInfoSelectors,
@@ -61,43 +61,57 @@ const popupWithProfile = new PopupWithForm (
       })
     })
     .catch(err => console.warn(err))
+    .finally( () => popupWithProfile.loadingRender(false) );
     },
     currentFormName: 'user-data',
-    inputsSelector: '.popup__input-data'
+    inputsSelector: '.popup__input-data',
+    buttonSelector: '.popup__button-save'
   }
 );
 
 popupWithProfile.setEventListeners({closeBtnSelector: '.popup__close'});
 
-const popupWithConfirm = new PopupWithForm (
-  '.popup_confirm',
+const popupWithDeleteConfirm = new PopupWithConfirm (
+  '.popup_delete-confirm',
   { 
-    handleFormSubmit: (newUserData) => {
-      userInfo.setUserInfo(newUserData)
+    handleConfirm: (deleteData) => {
+      api.deleteCard(deleteData.cardId)
+      .then(messege => {
+        deleteData.deleteCard();
+        console.log(messege);
+      })
+      .catch(err => console.log(err)); 
     },
-    currentFormName: 'confirm-user-change',
+    currentFormName: 'delete-confirm',
+    buttonSelector: '.popup__button-save'
   }
 );
 
-popupWithConfirm.setEventListeners({closeBtnSelector: '.popup__close'});
-
-function isUserCard(cardId){
-  const userId = userInfo.getUserId();
-  return userId === cardId;
-}
+popupWithDeleteConfirm.setEventListeners({closeBtnSelector: '.popup__close'});
 
 function createCard(item) {
-  const userCard = isUserCard(item.owner._id);
+  const userId = userInfo.getUserId();
 
   const card = new Card(
     item,
     { 
-      renderPopupWithImage: handleCardClick,
-      renderPopupWithForm: handleCardTrashClick
+      renderPopupWithImage: ({name, link}) => {
+        popupWithImage.open({name, link})
+      },
+      renderPopupWithForm: ( (deleteData) => {
+        popupWithDeleteConfirm.open();
+        popupWithDeleteConfirm.getCardId(deleteData);
+      }),
+      likeCard: (cardId) => {
+        return api.likeCard(cardId);
+      },
+      dislikeCard: (cardId) => {
+        return api.dislikeCard(cardId);
+      }
     },
     cardSelectors,
     popupShowLargeImage,
-    userCard
+    userId
   );
 
   const cardElement = card.getCard();
@@ -121,40 +135,36 @@ const popupWithCardAdd = new PopupWithForm (
       photoGridRender.addItem(newCard, false);
       })
       .catch(err => console.warn(err))
+      .finally( () => popupWithCardAdd.loadingRender(false) );
     },
     currentFormName: 'new-card',
-    inputsSelector: '.popup__input-data'
+    inputsSelector: '.popup__input-data',
+    buttonSelector: '.popup__button-save'
   }
 );
 
 popupWithCardAdd.setEventListeners({closeBtnSelector: '.popup__close'});
-
 
 const popupWithUpdateAvatar = new PopupWithForm (
   '.popup_update-avatar',
   {
     handleFormSubmit: (avatarUrl) => {
       api.setUserAvatar({avatar: avatarUrl['avatar-url']})
-      .then( avatarUrl => userInfo.setUserAvatar(avatarUrl))
-      .catch(err => console.warn(err));
+      .then( userData => userInfo.setUserAvatar(userData.avatar))
+      .catch(err => console.warn(err))
+      .finally( () => popupWithUpdateAvatar.loadingRender(false) );
     },
     currentFormName: 'update-avatar',
-    inputsSelector: '.popup__input-data'
+    inputsSelector: '.popup__input-data',
+    buttonSelector: '.popup__button-save'
   }
 );
 
 popupWithUpdateAvatar.setEventListeners({closeBtnSelector: '.popup__close'});
 
 const popupWithImage = new PopupWithImage ('.popup_img-large', popupWithImageSelectors);
+
 popupWithImage.setEventListeners('.popup__close');
-
-function handleCardClick({name, link}) {
-  popupWithImage.open({name, link});
-}
-
-function handleCardTrashClick() {
-  popupWithConfirm.open();
-}
 
 const photoGridRender = new Section({
   renderer: (item) => {
@@ -165,12 +175,11 @@ const photoGridRender = new Section({
 }, '.photo-grid__list');
 
 api.getInitialCards()
-  .then((initialCards) => {    
-    photoGridRender.renderItems(initialCards);
-  })
-  .catch((err) => console.warn(err));
+.then((initialCards) => {    
+  photoGridRender.renderItems(initialCards);
+})
+.catch((err) => console.warn(err));
 
-    
 function addFocusHandler(...inputs) {
   inputs.forEach((input) => {
     input.addEventListener('focus', (event) => {

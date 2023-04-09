@@ -4,17 +4,21 @@ export default class Api {
         this._headers = headers;
     }
     
+  _handlePromise(res) {
+    if (res.ok) {
+      return res.json();
+    }
+
+    return Promise.reject(`Ошибка при получении объекта ${res.status}`);
+  }
+  
   getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
       method: 'GET',
       headers: this._headers
     })
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject(`Ошибка при получении объекта ${res.status}`);
+      return this._handlePromise(res);
     })
   }
 
@@ -25,12 +29,19 @@ export default class Api {
         body: JSON.stringify(newUserData)
       })
       .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-  
-        return Promise.reject(`Ошибка при получении объекта ${res.status}`);
+        return this._handlePromise(res);
       })
+  }
+
+  setUserAvatar(avatarUrl) {
+    return fetch(`${this._baseUrl}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify(avatarUrl)
+    })
+    .then((res) => {
+      return this._handlePromise(res);
+    })
   }
   
   getInitialCards() {
@@ -39,11 +50,7 @@ export default class Api {
       headers: this._headers
     })
     .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-
-        return Promise.reject(`Ошибка при получении объекта ${res.status}`);
+      return this._handlePromise(res);
     })
   }
 
@@ -55,26 +62,37 @@ export default class Api {
 
     })
     .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-
-        return Promise.reject(`Ошибка при получении объекта ${res.status}`);
+      return this._handlePromise(res);
+    })
+  }
+  
+  deleteCard(cardId){
+    return fetch(`${this._baseUrl}/cards/${cardId}`, {
+      method: 'delete',
+      headers: this._headers,
+    })
+    .then((res) => {
+      return this._handlePromise(res);
     })
   }
 
-  setUserAvatar(avatarUrl) {
-    return fetch(`${this._baseUrl}/users/me/avatar`, {
-      method: 'PATCH',
+  likeCard(cardId){
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+      method: 'put',
       headers: this._headers,
-      body: JSON.stringify(avatarUrl)
     })
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-  
-      return Promise.reject(`Ошибка при получении объекта ${res.status}`);
+      return this._handlePromise(res);
+    })
+  }
+
+  dislikeCard(cardId){
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+      method: 'delete',
+      headers: this._headers,
+    })
+    .then((res) => {
+      return this._handlePromise(res);
     })
   }
 }

@@ -9,8 +9,7 @@ export const popupAddNewCard = document.querySelector('.popup_item-input'),
       buttonOpenPopupCard = document.querySelector('.profile__add-button');
 
 export const popupUpdateAvatar = document.querySelector('.popup_update-avatar'),
-       inputAvatarUrl = document.querySelector('.popup__input-data_avatar-url'),
-       buttonOpenUpdateAvatar = document.querySelector('.avatar__change-button');
+      buttonOpenUpdateAvatar = document.querySelector('.avatar__change-button');
 
 export const popupShowLargeImage = document.querySelector('.popup_img-large');
 
