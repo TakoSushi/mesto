@@ -35,17 +35,6 @@ const api = new Api({
 
 const userInfo = new UserInfo (userInfoSelectors);
 
-api.getUserInfo()
-.then( userData => {
-  userInfo.setUserInfo({
-    'user-name': userData.name,
-    'user-profession': userData.about,
-    userId: userData._id
-  });
-  userInfo.setUserAvatar(userData.avatar);
-})
-.catch( err => console.warn(err));
-
 const popupWithProfile = new PopupWithForm (
   '.popup_user-input',
   { 
@@ -185,11 +174,18 @@ const photoGridRender = new Section({
 
 Promise.all([api.getInitialCards(), api.getUserInfo()])
 .then(res => {
-  const
-   initialCards = res[0];
-  const userId = res[1]._id;
+  const initialCards = res[0];
+  const userData = res[1];
   
-  photoGridRender.renderItems(initialCards, userId);
+  photoGridRender.renderItems(initialCards, userData._id);
+
+  userInfo.setUserInfo({
+    'user-name': userData.name,
+    'user-profession': userData.about,
+    userId: userData._id
+  });
+
+  userInfo.setUserAvatar(userData.avatar);
 })
 .catch((err) => console.warn(err));
 
