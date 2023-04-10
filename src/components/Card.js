@@ -1,5 +1,5 @@
 class Card {
-  constructor(card, {renderPopupWithImage, renderPopupWithForm, likeCard, dislikeCard}, cardSelectors, popupShowLargeImage, userId) {
+  constructor(card, userId, {renderPopupWithImage, renderPopupWithForm, likeCard, dislikeCard}, cardSelectors, popupShowLargeImage) {
     this._name = card.name;
     this._link = card.link;
     this._id = card._id;
@@ -25,6 +25,7 @@ class Card {
     this._openLargeImage = this._openLargeImage.bind(this);
     this._toogleLikeButton = this._toogleLikeButton.bind(this);
     this._deleteCard = this._deleteCard.bind(this);
+    this._setLikes = this._setLikes.bind(this);
   }
 
   _setLikesCount(likes) {
@@ -32,29 +33,24 @@ class Card {
   }
 
   _setLikes(likes) {
-    likes.forEach( (likeData) => {
-      if(likeData._id === this._userId) {
-        this._cardLikeButton.classList.add(this._cardLikeButtonActive);
-        this._isLiked = true;
-      };
-    });
+    const isUserCard = likes.some( likeData => likeData._id === this._userId);
+    
+    if(isUserCard) {
+      this._cardLikeButton.classList.add(this._cardLikeButtonActive);
+      this._isLiked = true;
+    } else {
+      this._cardLikeButton.classList.remove(this._cardLikeButtonActive);
+      this._isLiked = false;
+    };
+    
     this._setLikesCount(likes);
   }
 
   _toogleLikeButton() {
     if(!this._isLiked) {
-      this._likeCard(this._id)
-      .then( (cardData) => { this._setLikes(cardData.likes) })
-      .catch( (err) => console.log(err) );
-      this._isLiked = true;
+      this._likeCard(this._id, this._setLikes)
     } else {
-      this._dislikeCard(this._id)
-      .then( (cardData) => { 
-          this._cardLikeButton.classList.remove(this._cardLikeButtonActive);
-          this._setLikesCount(cardData.likes);
-       })
-      .catch( (err) => console.log(err) );
-      this._isLiked = false;
+      this._dislikeCard(this._id, this._setLikes)
     };
   }
 
@@ -98,7 +94,7 @@ class Card {
 
   _deleteCard() {
     this._card.remove();
-    this._template = null;
+    this._card = null;
   }
 }
 

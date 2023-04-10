@@ -15,7 +15,6 @@ export default class PopupWithForm extends Popup {
       event.preventDefault();
 
       this._handleConfirm(this._deleteData);
-      this.close();
     });
   }
 

@@ -60,6 +60,7 @@ const popupWithProfile = new PopupWithForm (
         'user-profession': userData.about
       })
     })
+    .then( () => popupWithProfile.close())
     .catch(err => console.warn(err))
     .finally( () => popupWithProfile.loadingRender(false) );
     },
@@ -80,6 +81,7 @@ const popupWithDeleteConfirm = new PopupWithConfirm (
         deleteData.deleteCard();
         console.log(messege);
       })
+      .then( () => popupWithDeleteConfirm.close())
       .catch(err => console.log(err)); 
     },
     currentFormName: 'delete-confirm',
@@ -89,11 +91,11 @@ const popupWithDeleteConfirm = new PopupWithConfirm (
 
 popupWithDeleteConfirm.setEventListeners({closeBtnSelector: '.popup__close'});
 
-function createCard(item) {
-  const userId = userInfo.getUserId();
+function createCard(item, userId) {
 
   const card = new Card(
     item,
+    userId,
     { 
       renderPopupWithImage: ({name, link}) => {
         popupWithImage.open({name, link})
@@ -102,16 +104,19 @@ function createCard(item) {
         popupWithDeleteConfirm.open();
         popupWithDeleteConfirm.getCardId(deleteData);
       }),
-      likeCard: (cardId) => {
-        return api.likeCard(cardId);
+      likeCard: (cardId, setLikes) => {
+        api.likeCard(cardId)
+        .then( (cardData) => { setLikes(cardData.likes) })
+        .catch( (err) => console.log(err) );
       },
-      dislikeCard: (cardId) => {
-        return api.dislikeCard(cardId);
+      dislikeCard: (cardId, setLikes) => {
+        api.dislikeCard(cardId)
+        .then( (cardData) => { setLikes(cardData.likes) })
+        .catch( (err) => console.log(err) );
       }
     },
     cardSelectors,
-    popupShowLargeImage,
-    userId
+    popupShowLargeImage
   );
 
   const cardElement = card.getCard();
@@ -127,13 +132,16 @@ const popupWithCardAdd = new PopupWithForm (
         link: newCardData[inputImageUrl.name]
       };
 
+      const userId = userInfo.getUserId();
+
       api.addNewCard(item)
       .then((newCardData) => {
         
-      const newCard = createCard(newCardData);
+      const newCard = createCard(newCardData, userId);
 
       photoGridRender.addItem(newCard, false);
       })
+      .then( () => popupWithCardAdd.close())
       .catch(err => console.warn(err))
       .finally( () => popupWithCardAdd.loadingRender(false) );
     },
@@ -151,6 +159,7 @@ const popupWithUpdateAvatar = new PopupWithForm (
     handleFormSubmit: (avatarUrl) => {
       api.setUserAvatar({avatar: avatarUrl['avatar-url']})
       .then( userData => userInfo.setUserAvatar(userData.avatar))
+      .then( () => popupWithUpdateAvatar.close())
       .catch(err => console.warn(err))
       .finally( () => popupWithUpdateAvatar.loadingRender(false) );
     },
@@ -167,16 +176,20 @@ const popupWithImage = new PopupWithImage ('.popup_img-large', popupWithImageSel
 popupWithImage.setEventListeners('.popup__close');
 
 const photoGridRender = new Section({
-  renderer: (item) => {
-    const newCard = createCard(item);
+  renderer: (item, userId) => {
+    const newCard = createCard(item, userId);
     
     photoGridRender.addItem(newCard, true);
   },
 }, '.photo-grid__list');
 
-api.getInitialCards()
-.then((initialCards) => {    
-  photoGridRender.renderItems(initialCards);
+Promise.all([api.getInitialCards(), api.getUserInfo()])
+.then(res => {
+  const
+   initialCards = res[0];
+  const userId = res[1]._id;
+  
+  photoGridRender.renderItems(initialCards, userId);
 })
 .catch((err) => console.warn(err));
 
